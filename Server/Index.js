@@ -13,6 +13,15 @@ const fileUpload = require("express-fileupload");
 const dotenv = require("dotenv");
 
 const PORT = process.env.PORT || 4000;
+const cors = require("cors");
+
+// Allow Vercel frontend
+app.use(
+  cors({
+    origin: ["https://study-ease.vercel.app"],
+    credentials: true,
+  })
+);
 
 
 dotenv.config();
@@ -23,12 +32,6 @@ database.connect();
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(
-	cors({
-		origin: "*",
-		credentials: true,
-	})
-);
 app.use(
 	fileUpload({
 		useTempFiles: true,
