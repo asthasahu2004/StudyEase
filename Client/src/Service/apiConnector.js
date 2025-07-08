@@ -6,11 +6,15 @@ export const axiosInstance = axios.create({
 });
 
 export const apiConnector = (method, url, bodyData, headers, params) => {
-  return axiosInstance({
-    method: `${method}`,
-    url: `${url}`,
-    data: bodyData ? bodyData : null,
-    headers: headers ? headers : null,
-    params: params ? params : null,
-  });
+  const config = {
+    method,
+    url,
+    withCredentials: true, // optional here, already in axiosInstance
+  };
+
+  if (bodyData) config.data = bodyData;
+  if (headers) config.headers = headers;
+  if (params) config.params = params;
+
+  return axiosInstance(config);
 };
