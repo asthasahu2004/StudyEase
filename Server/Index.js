@@ -20,12 +20,6 @@ app.use(
   })
 );
 
-// ✅ Explicitly handle preflight OPTIONS requests
-app.options("*", cors({
-  origin: "https://study-ease.vercel.app",
-  credentials: true,
-}));
-
 // ✅ Optional: CORS Debug Logger
 app.use((req, res, next) => {
   res.on("finish", () => {
