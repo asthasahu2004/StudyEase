@@ -19,15 +19,12 @@ export function sendOtp(email, navigate) {
     const toastId = toast.loading("Loading...")
     dispatch(setLoading(true))
     try {
-      console.log("Calling:", SENDOTP_API);
-      console.log("Calling:", endpoints.SENDOTP_API)
+      console.log("Calling:", SENDOTP_API)
       const response = await apiConnector("POST", SENDOTP_API, {
         email,
         checkUserPresent: true,
       })
       console.log("SENDOTP API RESPONSE............", response)
-
-      console.log(response.data.success)
 
       if (!response.data.success) {
         throw new Error(response.data.message)
@@ -36,13 +33,16 @@ export function sendOtp(email, navigate) {
       toast.success("OTP Sent Successfully")
       navigate("/verify-email")
     } catch (error) {
-      console.log("SENDOTP API ERROR............", error)
-      toast.error("Could Not Send OTP")
+      // Enhanced error logging:
+      console.error("SENDOTP API ERROR status:", error.response?.status)
+      console.error("SENDOTP API ERROR data:", error.response?.data)
+      toast.error(error.response?.data?.message || "Could Not Send OTP")
     }
     dispatch(setLoading(false))
     toast.dismiss(toastId)
   }
 }
+
 
 export function signUp(
   accountType,
