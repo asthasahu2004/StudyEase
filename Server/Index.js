@@ -4,25 +4,23 @@ const cookieParser = require("cookie-parser");
 const fileUpload = require("express-fileupload");
 const dotenv = require("dotenv");
 
-dotenv.config(); // ✅ Load env variables
+// ✅ Load environment variables
+dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 4000;
 
-// ✅ CORS — MUST be at the top (and DO NOT override later)
+// ✅ CORS — Must be at the top
 app.use(
   cors({
-    origin: "https://study-ease.vercel.app",
+    origin: "https://study-ease.vercel.app", // ✅ Set your frontend origin
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
-// ✅ DO NOT use this line — it overrides the correct CORS setup 👇
-// app.options("*", cors()); ← ❌ REMOVE THIS LINE
-
-// ✅ Optional: helpful CORS logger (after cors is set up)
+// ✅ Optional: CORS Debug Logger
 app.use((req, res, next) => {
   res.on("finish", () => {
     console.log(`CORS Check → ${req.method} ${req.originalUrl}`);
@@ -32,7 +30,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// ✅ Core Middlewares
+// ✅ Middlewares
 app.use(express.json());
 app.use(cookieParser());
 app.use(
@@ -42,14 +40,14 @@ app.use(
   })
 );
 
-// ✅ DB and Cloudinary Configs
+// ✅ Connect DB & Cloudinary
 const { cloudinaryConnect } = require("./Configuration/Cloudinary");
 const database = require("./Configuration/Database");
 
 cloudinaryConnect();
 database.connect();
 
-// ✅ All Routes
+// ✅ Routes
 const userRoutes = require("./Route/User");
 const profileRoutes = require("./Route/Profile");
 const courseRoutes = require("./Route/Course");
@@ -62,12 +60,12 @@ app.use("/api/v1/course", courseRoutes);
 app.use("/api/v1/payment", paymentRoutes);
 app.use("/api/v1/reach", contactUsRoute);
 
-// ✅ Base route
+// ✅ Health Check Route
 app.get("/", (req, res) => {
   res.json({ success: true, message: "Welcome to StudyEase" });
 });
 
-// ✅ Start server
+// ✅ Start Server
 app.listen(PORT, () => {
   console.log(`✅ App is listening at ${PORT}`);
 });
