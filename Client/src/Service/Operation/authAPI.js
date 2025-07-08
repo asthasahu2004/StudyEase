@@ -20,6 +20,7 @@ export function sendOtp(email, navigate) {
     dispatch(setLoading(true))
     try {
       console.log("Calling:", SENDOTP_API);
+      console.log("Calling:", endpoints.SENDOTP_API)
       const response = await apiConnector("POST", SENDOTP_API, {
         email,
         checkUserPresent: true,
