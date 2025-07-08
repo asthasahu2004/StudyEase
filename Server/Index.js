@@ -10,15 +10,21 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 4000;
 
-// ✅ CORS — Must be at the top
+// ✅ CORS — Must be FIRST and include origin + OPTIONS handling
 app.use(
   cors({
-    origin: "https://study-ease.vercel.app", // ✅ Set your frontend origin
+    origin: "https://study-ease.vercel.app",
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
+
+// ✅ Explicitly handle preflight OPTIONS requests
+app.options("*", cors({
+  origin: "https://study-ease.vercel.app",
+  credentials: true,
+}));
 
 // ✅ Optional: CORS Debug Logger
 app.use((req, res, next) => {
@@ -30,7 +36,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// ✅ Middlewares
+// ✅ Middleware
 app.use(express.json());
 app.use(cookieParser());
 app.use(
@@ -40,7 +46,7 @@ app.use(
   })
 );
 
-// ✅ Connect DB & Cloudinary
+// ✅ Connect services
 const { cloudinaryConnect } = require("./Configuration/Cloudinary");
 const database = require("./Configuration/Database");
 
@@ -60,12 +66,12 @@ app.use("/api/v1/course", courseRoutes);
 app.use("/api/v1/payment", paymentRoutes);
 app.use("/api/v1/reach", contactUsRoute);
 
-// ✅ Health Check Route
+// ✅ Health check route
 app.get("/", (req, res) => {
   res.json({ success: true, message: "Welcome to StudyEase" });
 });
 
-// ✅ Start Server
+// ✅ Start server
 app.listen(PORT, () => {
   console.log(`✅ App is listening at ${PORT}`);
 });
