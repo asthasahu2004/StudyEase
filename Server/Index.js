@@ -19,6 +19,15 @@ app.use(
   })
 );
 
+app.use((req, res, next) => {
+  res.on("finish", () => {
+    console.log(`CORS Check → ${req.method} ${req.originalUrl}`);
+    console.log("Origin:", req.headers.origin);
+    console.log("Sent Headers:", res.getHeaders());
+  });
+  next();
+});
+
 // ✅ REMAINING MIDDLEWARE
 app.use(express.json());
 app.use(cookieParser());
