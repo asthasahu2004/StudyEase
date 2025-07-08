@@ -1,6 +1,9 @@
 import axios from "axios";
 
-export const axiosInstance = axios.create({});
+// ✅ Always send cookies with requests (for auth)
+export const axiosInstance = axios.create({
+  withCredentials: true,
+});
 
 export const apiConnector = (method, url, bodyData, headers, params) => {
   return axiosInstance({
