@@ -13,7 +13,6 @@ const fileUpload = require("express-fileupload");
 const dotenv = require("dotenv");
 
 const PORT = process.env.PORT || 4000;
-const cors = require("cors");
 
 // Allow Vercel frontend
 app.use(
